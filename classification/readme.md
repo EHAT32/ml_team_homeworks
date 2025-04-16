@@ -6,7 +6,7 @@
 
 Сперва потребуется [Docker](https://www.docker.com/)
 
-Клонируем репозиторий
+Клонируем репозиторий исходный репозиторий
 
 ```
 git clone https://github.com/EHAT32/ml_team_homeworks.git

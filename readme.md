@@ -12,4 +12,4 @@
 
 Внутри каждой папки находится отдельный ```readme.md```
 
-* ```classification``` -- предсказание взятия страховки клиентом
+* [classification](https://github.com/EHAT32/ml_team_homeworks/tree/main/classification) -- предсказание взятия страховки клиентом
