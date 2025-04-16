@@ -64,12 +64,19 @@ def predict_model(input_data : PredictionInput):
     
     # Предсказание
     predictions = model.predict(new_data)
+    prediction_value = int(predictions[0])  
     
-    # Интерпретация данных
-    result = "Клиент возьмёт страховку" if predictions[0] == 1 else "Клиент не возьмёт страховку"
+    # Интерпретация данных с проверкой
+    try:
+        result = ("Клиент не возьмёт страховку", "Клиент возьмёт страховку")[prediction_value]
+    except IndexError:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction mapping error for value: {prediction_value}"
+        )
     
-    return {"prediction" : result}
-
+    return {"prediction": result, "_original_prediction": prediction_value}
+    
 '''
 Проверка работы API (/health)
 curl -X GET http://127.0.0.1:5000/health

@@ -64,8 +64,17 @@ if st.button("🔍 Predict"):
             response = requests.post(f"http://{ip_api}:{port_api}/predict_model", json=data)
 
             if response.status_code == 200:
+                response_data = response.json()
                 prediction = response.json()["prediction"]
-                st.success("✅ Успешный прогноз:")
+                if "_original_prediction" in response_data:
+                    original_value = response_data["_original_prediction"]
+                    expected_text = "Клиент возьмёт страховку" if original_value == 1 else "Клиент не возьмёт страховку"
+                    
+                    if prediction != expected_text:
+                        st.error("⚠️ Ошибка согласованности данных!")
+                        st.error(f"Получено: {prediction} | Ожидалось: {expected_text}")
+                    else:
+                        st.success("✅ Успешный прогноз:")
                 st.metric(label="", value=prediction)
                 if prediction == "Клиент возьмёт страховку":
                     st.balloons()
