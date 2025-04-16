@@ -40,6 +40,9 @@ class PredictionInput(BaseModel):
     Vehicle_Damage : bool
     Policy_Sales_Channel : int
     
+# Батчи для тестирования модели
+class BatchPredictionInput(BaseModel):
+    data: list[PredictionInput]
 
 @app.get("/stats")
 def stats():
@@ -76,6 +79,35 @@ def predict_model(input_data : PredictionInput):
         )
     
     return {"prediction": result, "_original_prediction": prediction_value}
+    
+# Тест API
+@app.post("/test_predict_batch")
+def test_predict_batch(batch_data: BatchPredictionInput):
+    global request_count
+    request_count += len(batch_data.data)
+
+    # Преобразуем данные в DataFrame
+    new_data = pd.DataFrame([{
+        "Previously_Insured": int(item.Previously_Insured),
+        "Vehicle_Age": encode_vehicle_age(item.Vehicle_Age),
+        "Vehicle_Damage": int(item.Vehicle_Damage),
+        "Policy_Sales_Channel": encode_policy_channel(item.Policy_Sales_Channel)
+    } for item in batch_data.data])
+    
+    # Преобразуем типы данных в DataFrame
+    new_data = new_data.astype({
+        "Previously_Insured": int,
+        "Vehicle_Age": str,
+        "Vehicle_Damage": int,
+        "Policy_Sales_Channel": int
+    })
+
+    # Предсказания
+    predictions = model.predict(new_data)
+    # Преобразуем numpy array в list, а элементы numpy.int64 в int
+    return {"predictions": [int(p) for p in predictions.tolist()]}
+
+
     
 '''
 Проверка работы API (/health)
