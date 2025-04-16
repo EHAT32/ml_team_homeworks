@@ -6,16 +6,17 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-with open("Random_Forest.pkl", "rb") as f:
+# Загрузка модели из файла
+with open("model.pkl", "rb") as f:
     model = pickle.load(f)
     
-#счётчик запросов
+# Счетчик запросов
 request_count = 0
 
 def encode_vehicle_age(age):
-    if age < 1:
+    if age == "< 1 Year":
         return 0
-    elif 1 <= age <= 2:
+    elif age == "1-2 Year":
         return 1
     else:
         return 2
@@ -32,16 +33,17 @@ def encode_policy_channel(val):
     dist = np.abs(dist - val)
     return np.argmin(dist)
     
-
+# Модель для валидации входных данных
 class PredictionInput(BaseModel):
     Previously_Insured : bool
-    Vehicle_Age : int
+    Vehicle_Age : str
     Vehicle_Damage : bool
     Policy_Sales_Channel : int
     
+
 @app.get("/stats")
 def stats():
-    return {"request_count":request_count}
+    return {"request_count": request_count}
 
 @app.get("/health")
 def health():
@@ -52,7 +54,7 @@ def predict_model(input_data : PredictionInput):
     global request_count
     request_count += 1
     
-    #Оборачиваем данные в df, преобразуем их
+    # Оборачиваем данные в df, преобразуем их
     new_data = pd.DataFrame({
         "Previously_Insured" : int(input_data.Previously_Insured),
         "Vehicle_Age" : encode_vehicle_age(input_data.Vehicle_Age),
@@ -60,10 +62,10 @@ def predict_model(input_data : PredictionInput):
         "Policy_Sales_Channel" : encode_policy_channel(input_data.Policy_Sales_Channel),
     }, index=[0])
     
-    #предсказание
+    # Предсказание
     predictions = model.predict(new_data)
     
-    #интерпретация данных
+    # Интерпретация данных
     result = "Клиент возьмёт страховку" if predictions[0] == 1 else "Клиент не возьмёт страховку"
     
     return {"prediction" : result}
@@ -72,9 +74,9 @@ def predict_model(input_data : PredictionInput):
 Проверка работы API (/health)
 curl -X GET http://127.0.0.1:5000/health
 curl -X GET http://127.0.0.1:5000/stats
-curl -X POST http://127.0.0.1:5000/predict_model -H "Content-Type: application/json" -d '{"Previously_Insured": true, "Vehicle_Age": 3, "Vehicle_Damage": false, "Policy_Sales_Channel": 100}'
+curl -X POST http://127.0.0.1:5000/predict_model -H "Content-Type: application/json" -d '{"Previously_Insured": true, "Vehicle_Age": "1-2 Year", "Vehicle_Damage": false, "Policy_Sales_Channel": 100}'
 '''
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=5000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)

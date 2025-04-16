@@ -1,0 +1,22 @@
+services:
+  api-service:
+    build:
+      context: .
+      dockerfile: api-service/Dockerfile
+    image: api-service:latest
+    container_name: api-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api-service/model.pkl:/app/model.pkl
+
+  web-service:
+    build:
+      context: .
+      dockerfile: web-service/Dockerfile
+    image: web-service:latest
+    container_name: web-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./web-service/streamlit_app.py:/app/streamlit_app.py

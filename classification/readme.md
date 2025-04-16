@@ -1,5 +1,7 @@
-# Test api
+# Insurance Predictor Microservice
 
-API взаимодействие с моделью
+Микросервис страхового предсказателя
 
-Для работы запускать скрипт из папки classification
+```
+docker compose up -d 
+```
