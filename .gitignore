@@ -1,2 +1,3 @@
 *.csv
 __pycache__
+license-plate-removal/datasets
