@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pillow
+numpy
+opencv-python-headless
+tritonclient[grpc]
+python-multipart
