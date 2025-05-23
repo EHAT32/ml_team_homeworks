@@ -22,7 +22,8 @@ app.add_middleware(
 )
 
 API_KEY = os.getenv("API_KEY")
-API_URL = "https://openrouter.ai/api/v1/chat/completions"
+API_URL = os.getenv("API_URL", "https://openrouter.ai/api/v1/chat/completions")
+MODEL_NAME = os.getenv("MODEL_NAME", "meta-llama/llama-4-maverick:free")
 
 if not API_KEY:
     raise ValueError("API_KEY не установлен в переменных окружения")
@@ -45,7 +46,7 @@ async def call_deepseek_api(system_prompt:str, prompt:str) -> str:
     }
 
     payload = {
-        "model": "meta-llama/llama-4-maverick:free",
+        "model": MODEL_NAME,
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
