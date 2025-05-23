@@ -1,5 +1,7 @@
 # Переводчик на базе LLM моделе с помощью FastAPI + Streamlit
 
+![Анимация](gifs/llm-demo.gif)
+
 ## Установка и запуск
 
 Сперва потребуется [Docker](https://www.docker.com/)
