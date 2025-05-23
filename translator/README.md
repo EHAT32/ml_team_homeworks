@@ -1,4 +1,4 @@
-# Переводчик на базе LLM моделе с помощью FastAPI + Streamlit
+# Переводчик на базе LLM
 
 ![Анимация](gifs/llm-demo.gif)
 
