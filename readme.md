@@ -19,3 +19,11 @@
 Бинарная классификация для датасета с [Kaggle](https://www.kaggle.com/datasets/annantkumarsingh/health-insurance-cross-sell-prediction-data/discussion/516324)
 
 Подробности обработки данных и работы модели смотрите [здесь](https://github.com/EHAT32/ml_team_homeworks/tree/main/classification)
+
+### [Скрытие номеров на автомобилях](https://github.com/EHAT32/ml_team_homeworks/tree/main/license-plate-removal)
+
+Использование комьютерного зрения для замазывания номеров на автомобилях
+
+### [Переводчик на основе LLM](https://github.com/EHAT32/ml_team_homeworks/tree/main/translator)
+
+Использование большой языковой модели для перевода текста
